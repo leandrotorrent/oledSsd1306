@@ -38,17 +38,12 @@ bool_t wrap = TRUE;
 
 
 
-void ssd1306_command(uint16_t c)
+void ssd1306_command(uint8_t c)
 {
-	uint16_t control = 0x00;   // Co = 0, D/C = 0
-	/*
-    I2C_Start(SSD1306_STREAM);
-    I2C_Write(SSD1306_STREAM, _i2caddr);
-    I2C_Write(SSD1306_STREAM, control);
-    I2C_Write(SSD1306_STREAM, c);
-    I2C_Stop(SSD1306_STREAM);
-	 */
-	uint16_t transmitDataBuffer[2];
+	uint8_t control = 0x00;   // Co = 0, D/C = 0
+	//uint8_t co = c;
+
+	uint8_t transmitDataBuffer[2];
 	transmitDataBuffer[0] = control;
 	transmitDataBuffer[1] = c;
 	i2cWrite( I2C0, _i2caddr, transmitDataBuffer, 2, TRUE );
@@ -57,7 +52,7 @@ void ssd1306_command(uint16_t c)
 //Capaz deba hardcorear la funcion Begin con los parametros
 //vccstate = SSD1306_SWITCHCAPVCC y i2caddr = SSD1306_I2C_ADDRESS
 
-void SSD1306_Begin(uint16_t vccstate, uint16_t i2caddr)
+void SSD1306_Begin(uint8_t vccstate, uint8_t i2caddr)
 {
 	_vccstate = vccstate;
 	_i2caddr  = i2caddr;
@@ -138,7 +133,7 @@ void SSD1306_Begin(uint16_t vccstate, uint16_t i2caddr)
 	text_size = 1;
 }
 
-void SSD1306_DrawPixel(uint16_t x, uint16_t y, bool_t color)
+void SSD1306_DrawPixel(uint8_t x, uint8_t y, bool_t color)
 {
 	if ((x >= SSD1306_LCDWIDTH) || (y >= SSD1306_LCDHEIGHT))
 		return;
@@ -148,7 +143,7 @@ void SSD1306_DrawPixel(uint16_t x, uint16_t y, bool_t color)
 		ssd1306_buffer[x + (uint16_t)(y / 8) * SSD1306_LCDWIDTH] &=  ~(1 << (y & 7));
 }
 
-void SSD1306_StartScrollRight(uint16_t start, uint16_t stop)
+void SSD1306_StartScrollRight(uint8_t start, uint8_t stop)
 {
 	ssd1306_command(SSD1306_RIGHT_HORIZONTAL_SCROLL);
 	ssd1306_command(0X00);
@@ -160,7 +155,7 @@ void SSD1306_StartScrollRight(uint16_t start, uint16_t stop)
 	ssd1306_command(SSD1306_ACTIVATE_SCROLL);
 }
 
-void SSD1306_StartScrollLeft(uint16_t start, uint16_t stop)
+void SSD1306_StartScrollLeft(uint8_t start, uint8_t stop)
 {
 	ssd1306_command(SSD1306_LEFT_HORIZONTAL_SCROLL);
 	ssd1306_command(0X00);
@@ -172,7 +167,7 @@ void SSD1306_StartScrollLeft(uint16_t start, uint16_t stop)
 	ssd1306_command(SSD1306_ACTIVATE_SCROLL);
 }
 
-void SSD1306_StartScrollDiagRight(uint16_t start, uint16_t stop)
+void SSD1306_StartScrollDiagRight(uint8_t start, uint8_t stop)
 {
 	ssd1306_command(SSD1306_SET_VERTICAL_SCROLL_AREA);
 	ssd1306_command(0X00);
@@ -186,7 +181,7 @@ void SSD1306_StartScrollDiagRight(uint16_t start, uint16_t stop)
 	ssd1306_command(SSD1306_ACTIVATE_SCROLL);
 }
 
-void SSD1306_StartScrollDiagLeft(uint16_t start, uint16_t stop)
+void SSD1306_StartScrollDiagLeft(uint8_t start, uint8_t stop)
 {
 	ssd1306_command(SSD1306_SET_VERTICAL_SCROLL_AREA);
 	ssd1306_command(0X00);
@@ -207,7 +202,7 @@ void SSD1306_StopScroll(void)
 
 void SSD1306_Dim(bool_t dim)
 {
-	uint16_t contrast;
+	uint8_t contrast;
 	if (dim)
 		contrast = 0; // Dimmed display
 	else {
@@ -248,7 +243,7 @@ void SSD1306_Display(void)
 
 
 		uint16_t length = (SSD1306_LCDWIDTH*SSD1306_LCDHEIGHT / 8);
-		uint16_t transmitDataBuffer2[129];
+		uint8_t transmitDataBuffer2[129];
 
 
 		for(int16_t i=0;i<length;i++){
@@ -289,7 +284,7 @@ void SSD1306_DrawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, bool_t col
 {
 	bool_t steep;
 	int8_t ystep;
-	uint16_t dx, dy;
+	uint8_t dx, dy;
 	int16_t err;
 	steep = abs(y1 - y0) > abs(x1 - x0);
 	if (steep) {
@@ -326,17 +321,17 @@ void SSD1306_DrawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, bool_t col
 	}
 }
 
-void SSD1306_DrawFastHLine(uint16_t x, uint16_t y, uint16_t w, bool_t color)
+void SSD1306_DrawFastHLine(uint8_t x, uint8_t y, uint8_t w, bool_t color)
 {
 	SSD1306_DrawLine(x, y, x + w - 1, y, color);
 }
 
-void SSD1306_DrawFastVLine(uint16_t x, uint16_t y, uint16_t h, bool_t color)
+void SSD1306_DrawFastVLine(uint8_t x, uint8_t y, uint8_t h, bool_t color)
 {
 	SSD1306_DrawLine(x, y, x, y + h - 1, color);
 }
 
-void SSD1306_FillRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool_t color)
+void SSD1306_FillRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, bool_t color)
 {
 	for (int16_t i = x; i < x + w; i++)
 		SSD1306_DrawFastVLine(i, y, h, color);
@@ -381,7 +376,7 @@ void SSD1306_DrawCircle(int16_t x0, int16_t y0, int16_t r)
 
 }
 
-void SSD1306_DrawCircleHelper(int16_t x0, int16_t y0, int16_t r, uint16_t cornername)
+void SSD1306_DrawCircleHelper(int16_t x0, int16_t y0, int16_t r, uint8_t cornername)
 {
 	int16_t f     = 1 - r;
 	int16_t ddF_x = 1;
@@ -425,7 +420,7 @@ void SSD1306_FillCircle(int16_t x0, int16_t y0, int16_t r, bool_t color)
 }
 
 // Used to do circles and roundrects
-void SSD1306_FillCircleHelper(int16_t x0, int16_t y0, int16_t r, uint16_t cornername, int16_t delta, bool_t color) {
+void SSD1306_FillCircleHelper(int16_t x0, int16_t y0, int16_t r, uint8_t cornername, int16_t delta, bool_t color) {
 	int16_t f     = 1 - r;
 	int16_t ddF_x = 1;
 	int16_t ddF_y = -2 * r;
@@ -455,7 +450,7 @@ void SSD1306_FillCircleHelper(int16_t x0, int16_t y0, int16_t r, uint16_t corner
 }
 
 // Draw a rectangle
-void SSD1306_DrawRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
+void SSD1306_DrawRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h)
 {
 	SSD1306_DrawFastHLine(x, y, w, TRUE);
 	SSD1306_DrawFastHLine(x, y + h - 1, w, TRUE);
@@ -464,7 +459,7 @@ void SSD1306_DrawRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
 }
 
 // Draw a rounded rectangle
-void SSD1306_DrawRoundRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t r)
+void SSD1306_DrawRoundRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t r)
 {
 	// smarter version
 	SSD1306_DrawFastHLine(x + r, y, w - 2 * r, TRUE); // Top
@@ -479,7 +474,7 @@ void SSD1306_DrawRoundRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint1
 }
 
 // Fill a rounded rectangle
-void SSD1306_FillRoundRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t r, bool_t color)
+void SSD1306_FillRoundRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t r, bool_t color)
 {
 	// smarter version
 	SSD1306_FillRect(x + r, y, w - 2 * r, h, color);
@@ -489,7 +484,7 @@ void SSD1306_FillRoundRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint1
 }
 
 // Draw a triangle
-void SSD1306_DrawTriangle(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
+void SSD1306_DrawTriangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
 {
 	SSD1306_DrawLine(x0, y0, x1, y1, TRUE);
 	SSD1306_DrawLine(x1, y1, x2, y2, TRUE);
@@ -584,14 +579,14 @@ void SSD1306_SetTextWrap(bool_t w)
 	wrap = w;
 }
 
-void SSD1306_DrawChar(uint16_t x, uint16_t y, uint16_t c, uint16_t size)
+void SSD1306_DrawChar(uint8_t x, uint8_t y, uint8_t c, uint8_t size)
 {
 	SSD1306_GotoXY(x, y);
 	SSD1306_TextSize(size);
 	SSD1306_Print(c);
 }
 
-void SSD1306_DrawText(uint16_t x, uint16_t y, char *_text, uint16_t size)
+void SSD1306_DrawText(uint8_t x, uint8_t y, char *_text, uint8_t size)
 {
 	SSD1306_GotoXY(x, y);
 	SSD1306_TextSize(size);
@@ -601,7 +596,7 @@ void SSD1306_DrawText(uint16_t x, uint16_t y, char *_text, uint16_t size)
 }
 
 // move cursor to position (x, y)
-void SSD1306_GotoXY(uint16_t x, uint16_t y)
+void SSD1306_GotoXY(uint8_t x, uint8_t y)
 {
 	if((x >= SSD1306_LCDWIDTH) || (y >= SSD1306_LCDHEIGHT))
 		return;
@@ -610,7 +605,7 @@ void SSD1306_GotoXY(uint16_t x, uint16_t y)
 }
 
 // set text size
-void SSD1306_TextSize(uint16_t t_size)
+void SSD1306_TextSize(uint8_t t_size)
 {
 	if(t_size < 1)
 		t_size = 1;
@@ -623,10 +618,10 @@ void SSD1306_TextSize(uint16_t t_size)
     \n  Go to start of current line
     \r  Go to line below
  */
-void SSD1306_Print(uint16_t c)
+void SSD1306_Print(uint8_t c)
 {
 	bool_t _color;
-	uint16_t i, j, line;
+	uint8_t i, j, line;
 
 	if (c == ' ' && x_pos == 0 && wrap)
 		return;
@@ -687,10 +682,10 @@ void SSD1306_Print(uint16_t c)
 // print custom char (dimension: 7x5 pixel)
 // parametro de la funcion era "rom uint16_t *c"
 
-void SSD1306_PutCustomC( uint16_t *c)
+void SSD1306_PutCustomC( uint8_t *c)
 {
 	bool_t _color;
-	uint16_t i, j, line;
+	uint8_t i, j, line;
 
 	for(i = 0; i < 5; i++ ) {
 		line = c[i];
@@ -724,11 +719,11 @@ void SSD1306_PutCustomC( uint16_t *c)
 // draw BMP stored in ROM
 // parametro de la funcion era "uint16_t x, uint16_t y, rom uint16_t *bitmap, uint16_t w, uint16_t h"
 
-void SSD1306_ROMBMP(uint16_t x, uint16_t y, uint16_t *bitmap, uint16_t w, uint16_t h)
+void SSD1306_ROMBMP(uint8_t x, uint8_t y, uint8_t *bitmap, uint8_t w, uint8_t h)
 {
-	for( uint16_t i = 0; i < h/8; i++ )
+	for( uint8_t i = 0; i < h/8; i++ )
 	{
-		for( uint16_t j = 0; j < (uint16_t)w * 8; j++ )
+		for( uint8_t j = 0; j < (uint8_t)w * 8; j++ )
 		{
 			if( bit_test(bitmap[j/8 + i*w], j % 8) == 1 )
 				SSD1306_DrawPixel(x + j/8, y + i*8 + (j % 8), TRUE);

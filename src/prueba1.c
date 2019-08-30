@@ -15,9 +15,12 @@ int main(void) {
 
 	/* Inicializar la placa */
 	boardConfig();
-	i2cInit(I2C0, OLED_I2C_RATE);
-
-	SSD1306_Begin(SSD1306_SWITCHCAPVCC, SSD1306_I2C_ADDRESS);
+	i2cInit( I2C0 , OLED_I2C_RATE );
+	/*if()){
+	gpioWrite( LED1, ON );
+	}
+	else gpioWrite( LED1, ON );*/
+	SSD1306_Begin(SSD1306_SWITCHCAPVCC , SSD1306_I2C_ADDRESS);
 
 
 	// Show image buffer on the display hardware.
@@ -30,22 +33,27 @@ int main(void) {
 	SSD1306_ClearDisplay();
 
 	//char txt[15];
-	SSD1306_DrawText(5, 10, "CESE Co9", 2);
-	SSD1306_Display();
-	SSD1306_DrawText(9, 35, "Co9", 2);
-	SSD1306_Display();
+	SSD1306_DrawText(36, 5, "CESE", 2);
+
+	SSD1306_DrawText(40, 25, "Co9", 2);
+
 
 	//char txt[15];
-	SSD1306_DrawText(0, 55, "Protocolos", 1);
+	SSD1306_DrawText(10, 45, "Protocolos", 2);
 	SSD1306_Display();
 
-	delay(4000);
+	delay(3000);
 	SSD1306_ClearDisplay();
 
 	//char txt[15];
-	SSD1306_DrawText(0, 20, "Sistema de\n\rMonitoreo\n\rAmbiental", 1);
+	SSD1306_DrawText(37, 20, "Sistema de", 1);
+	SSD1306_DrawText(39, 30, "Monitoreo", 1);
+	SSD1306_DrawText(39, 40, "Ambiental", 1);
 	SSD1306_Display();
-	delay(4000);
+	SSD1306_StartScrollRight(0x00, 0x0F);
+	delay(8000);
+	SSD1306_StopScroll();
+	//delay(4000);
 	SSD1306_ClearDisplay();
 
 	//draw a single pixel
@@ -116,15 +124,14 @@ int main(void) {
 	  SSD1306_ClearDisplay();*/
 
 	//text display tests
-	//char txt[40];
-	SSD1306_DrawText(8,10, "TORRENT", 1);
-	SSD1306_Display();
-	SSD1306_DrawText(25,30, "Y", 1);
-	SSD1306_Display();
-	SSD1306_DrawText(6,50, "DEL VALLE", 1);
-	SSD1306_Display();
 
-	/*
+	SSD1306_DrawText(0,10, "Autores:\r\n\n* Miguel del Valle\r\n\n* Leandro Torrent", 1);
+	SSD1306_Display();
+	//SSD1306_Display();
+	delay(2000);
+	SSD1306_ClearDisplay();
+
+	/*char txt[40];
 	 sprintf(txt, "%.6f", 3.141592);
 	  SSD1306_DrawText(2, 16, txt, 1);
 
@@ -140,11 +147,8 @@ int main(void) {
 	while (1) {
 		//SSD1306_Display();
 		//
-
-		//SSD1306_DrawPixel(10, 10, TRUE);
-		//SSD1306_FillScreen(1);
-		/*char txt[15];
-		SSD1306_DrawText(0, 0, "Hello, world!", 1);*/
+		SSD1306_DrawText(0,10, "Temp: \r\n\ Humedad: \r\nPresion:\r\n\ Humo:\r\n\ " , 1);
+		SSD1306_Display();
 	}
 	return 0;
 }

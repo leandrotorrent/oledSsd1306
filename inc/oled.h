@@ -71,17 +71,17 @@
 
 #define ssd1306_swap(a, b) { int16_t t = a; a = b; b = t; }
 
-void ssd1306_command(uint16_t c);
+void ssd1306_command(uint8_t c);
 
 //uint16_t vccstate = SSD1306_SWITCHCAPVCC, uint16_t i2caddr = SSD1306_I2C_ADDRESS
-void SSD1306_Begin(uint16_t vccstate, uint16_t i2caddr);
+void SSD1306_Begin(uint8_t vccstate, uint8_t i2caddr);
 
 //bool_t color = TRUE
-void SSD1306_DrawPixel(uint16_t x, uint16_t y, bool_t color);
-void SSD1306_StartScrollRight(uint16_t start, uint16_t stop);
-void SSD1306_StartScrollLeft(uint16_t start, uint16_t stop);
-void SSD1306_StartScrollDiagRight(uint16_t start, uint16_t stop);
-void SSD1306_StartScrollDiagLeft(uint16_t start, uint16_t stop);
+void SSD1306_DrawPixel(uint8_t x, uint8_t y, bool_t color);
+void SSD1306_StartScrollRight(uint8_t start, uint8_t stop);
+void SSD1306_StartScrollLeft(uint8_t start, uint8_t stop);
+void SSD1306_StartScrollDiagRight(uint8_t start, uint8_t stop);
+void SSD1306_StartScrollDiagLeft(uint8_t start, uint8_t stop);
 void SSD1306_StopScroll(void);
 void SSD1306_Dim(bool_t dim);
 void SSD1306_Display(void);
@@ -89,30 +89,30 @@ void SSD1306_ClearDisplay(void);
 
 //bool_t color = TRUE
 void SSD1306_DrawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, bool_t color);
-void SSD1306_DrawFastHLine(uint16_t x, uint16_t y, uint16_t w, bool_t color);
-void SSD1306_DrawFastVLine(uint16_t x, uint16_t y, uint16_t h, bool_t color);
-void SSD1306_FillRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, bool_t color);
+void SSD1306_DrawFastHLine(uint8_t x, uint8_t y, uint8_t w, bool_t color);
+void SSD1306_DrawFastVLine(uint8_t x, uint8_t y, uint8_t h, bool_t color);
+void SSD1306_FillRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, bool_t color);
 void SSD1306_FillScreen(bool_t color );
 void SSD1306_DrawCircle(int16_t x0, int16_t y0, int16_t r);
-void SSD1306_DrawCircleHelper(int16_t x0, int16_t y0, int16_t r, uint16_t cornername);
+void SSD1306_DrawCircleHelper(int16_t x0, int16_t y0, int16_t r, uint8_t cornername);
 void SSD1306_FillCircle(int16_t x0, int16_t y0, int16_t r, bool_t color);
-void SSD1306_FillCircleHelper(int16_t x0, int16_t y0, int16_t r, uint16_t cornername, int16_t delta, bool_t color);
-void SSD1306_DrawRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
-void SSD1306_DrawRoundRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t r);
-void SSD1306_FillRoundRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t r, bool_t color );
-void SSD1306_DrawTriangle(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
+void SSD1306_FillCircleHelper(int16_t x0, int16_t y0, int16_t r, uint8_t cornername, int16_t delta, bool_t color);
+void SSD1306_DrawRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h);
+void SSD1306_DrawRoundRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t r);
+void SSD1306_FillRoundRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t r, bool_t color );
+void SSD1306_DrawTriangle(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
 void SSD1306_FillTriangle(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2, bool_t color );
 
 //size = 1
-void SSD1306_DrawChar(uint16_t x, uint16_t y, uint16_t c, uint16_t size );
-void SSD1306_DrawText(uint16_t x, uint16_t y, char *_text, uint16_t size );
-void SSD1306_TextSize(uint16_t t_size);
-void SSD1306_GotoXY(uint16_t x, uint16_t y);
-void SSD1306_Print(uint16_t c);
-void SSD1306_PutCustomC(uint16_t *c);
+void SSD1306_DrawChar(uint8_t x, uint8_t y, uint8_t c, uint8_t size );
+void SSD1306_DrawText(uint8_t x, uint8_t y, char *_text, uint8_t size );
+void SSD1306_TextSize(uint8_t t_size);
+void SSD1306_GotoXY(uint8_t x, uint8_t y);
+void SSD1306_Print(uint8_t c);
+void SSD1306_PutCustomC(uint8_t *c);
 void SSD1306_SetTextWrap(bool_t w);
 void SSD1306_InvertDisplay(bool_t i);
-void SSD1306_DrawBMP(uint16_t x, uint16_t y, uint16_t *bitmap, uint16_t w, uint16_t h);
+void SSD1306_DrawBMP(uint8_t x, uint8_t y, uint8_t *bitmap, uint8_t w, uint8_t h);
 
 /*
 const char Font[] = {
@@ -218,7 +218,7 @@ const char Font2[] = {
 };
 */
 
-static uint16_t ssd1306_buffer[SSD1306_LCDHEIGHT * SSD1306_LCDWIDTH / 8] = {
+static uint8_t ssd1306_buffer[SSD1306_LCDHEIGHT * SSD1306_LCDWIDTH / 8] = {
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
